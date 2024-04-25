@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import { ITeam, Team, TeamName } from './modules/Team/Model';
+import { ITeam, Team, TeamName } from './modules/Team/model';
 
 const PORT = 3000;
 

@@ -1,3 +1,5 @@
+import { v4 as uuid } from 'uuid';
+
 export class TeamName {
   static readonly REGEX = /^[A-Z][a-zA-Z\s]*$/;
 
@@ -14,18 +16,16 @@ export class TeamName {
 }
 
 export interface ITeam {
-  id: number;
+  id: string;
   name: TeamName;
 }
 
-const teste = 'hello';
-
 export class Team implements ITeam {
-  id: number;
+  id: string;
   name: TeamName;
 
   constructor(name: TeamName) {
-    this.id = Date.now();
+    this.id = uuid();
     this.name = name;
   }
 }
