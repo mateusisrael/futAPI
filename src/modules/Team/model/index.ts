@@ -18,8 +18,6 @@ export interface ITeam {
   name: TeamName;
 }
 
-const teste = 'hello';
-
 export class Team implements ITeam {
   id: number;
   name: TeamName;

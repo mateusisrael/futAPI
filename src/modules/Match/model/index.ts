@@ -1,4 +1,4 @@
-import { ITeam, TeamName } from '../../Team/Model';
+import { ITeam, TeamName } from '../../Team/model';
 
 type TeamScore = {
   timeId: string;
