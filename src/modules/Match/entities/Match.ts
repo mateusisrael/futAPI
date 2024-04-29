@@ -1,17 +1,18 @@
-import { ITeam, TeamName } from '../../Team/model';
+import { TeamName } from '../../@types';
+import { ITeam } from '../../Team/entities/Team';
 
-type TeamScore = {
+export type TeamScore = {
   timeId: string;
   name: TeamName;
   points: number;
 };
 
-type ScoreBoard = {
+export type ScoreBoard = {
   principalTeam: TeamScore;
   guestTeam: TeamScore;
 };
 
-export interface Match {
+export interface IMatch {
   id: string;
   principalTeam: ITeam;
   guestTeam: ITeam;
