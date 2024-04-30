@@ -31,3 +31,15 @@ export interface IMatchDTO {
   round: number;
   status: 'Não iniciada' | 'Em andamento' | 'Finalizada';
 }
+
+export function teamToDTO(team: ITeam) {
+  return {
+    id: team.id,
+    name: team.name.value,
+  };
+}
+
+export interface TeamDTO {
+  id: string;
+  name: string;
+}

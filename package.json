@@ -5,6 +5,7 @@
   "main": ".",
   "scripts": {
     "test": "jest --watchAll",
+    "test:createTeam": "jest --watch createTeam.spec.ts",
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn src/index.ts",
     "build": "tsc",
     "lint": "eslint --fix ./src"
