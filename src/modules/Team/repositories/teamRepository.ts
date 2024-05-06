@@ -1,4 +1,5 @@
-import { TeamDTO } from '../../@types';
+import { TeamDTO, TeamName } from '../../@types';
+import { ITeam } from '../entities/Team';
 import { ITeamRepository } from './implementation/ITeamRepository';
 
 export class TeamRepository implements ITeamRepository {
@@ -22,7 +23,13 @@ export class TeamRepository implements ITeamRepository {
     return team;
   }
 
-  findByName(name: string) {
-    return this.repository.find((i) => i.name === name);
+  findByName(name: string): ITeam | undefined {
+    const team = this.repository.find((i) => i.name === name);
+    if (!!team) {
+      return {
+        id: team.id,
+        name: new TeamName(team.name),
+      };
+    }
   }
 }
