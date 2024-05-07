@@ -1,14 +1,5 @@
-import { ITeam } from '../../../Team/model';
-import { IMatch, ScoreBoard } from '../../model';
-
-export interface IMatchDTO {
-  principalTeam: ITeam;
-  guestTeam: ITeam;
-  scoreBoard: ScoreBoard;
-  date: Date;
-  round: number;
-  status: 'Não iniciada' | 'Em andamento' | 'Finalizada';
-}
+import { ITeam } from '../../../Team/entities/Team';
+import { IMatch, ScoreBoard } from '../../entities/Match';
 
 export interface IMatchRepository {
   create: (match: IMatch) => IMatch;

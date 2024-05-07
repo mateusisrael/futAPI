@@ -1,4 +1,4 @@
-import { IMatch } from '../model';
+import { IMatch } from '../entities/Match';
 import { IMatchRepository } from './implementation/IMatchRepository';
 
 export class MatchRepository implements IMatchRepository {

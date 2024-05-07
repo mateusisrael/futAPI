@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
 import { CreateMatchUseCase } from './createMatchUseCase';
-import { IMatchDTO } from '../../repositories/implementation/IMatchRepository';
+import { IMatchDTO } from '../../../@types';
 
 export class CreateMatchController {
   constructor(private useCase: CreateMatchUseCase) {
