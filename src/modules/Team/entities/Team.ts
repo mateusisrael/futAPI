@@ -1,6 +1,10 @@
-import { TeamName } from '../../@types';
+import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-export interface ITeam {
+@Entity()
+export class Team {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
-  name: TeamName;
+
+  @Column()
+  name: string;
 }
