@@ -1,7 +1,7 @@
+import { Team } from '@modules/Team/entities/Team';
 import { TeamDTO } from '../../../@types';
-import { ITeam } from '../../entities/Team';
 
 export interface ITeamRepository {
-  create(team: TeamDTO): TeamDTO;
-  findByName(name: string): ITeam | undefined;
+  create(team: TeamDTO): Promise<void>;
+  findByName(name: string): Promise<Team | null>;
 }

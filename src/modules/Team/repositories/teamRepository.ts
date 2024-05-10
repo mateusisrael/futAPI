@@ -1,35 +1,23 @@
+import { Repository } from 'typeorm';
+import { postgresDataSource } from '../../../database';
 import { TeamDTO, TeamName } from '../../@types';
-import { ITeam } from '../entities/Team';
 import { ITeamRepository } from './implementation/ITeamRepository';
+import { Team } from '../entities/Team';
 
 export class TeamRepository implements ITeamRepository {
-  private static INSTANCE: TeamRepository;
-  private repository: Array<TeamDTO>;
+  private repository: Repository<Team>;
 
-  private constructor() {
-    this.repository = [];
+  constructor() {
+    this.repository = postgresDataSource.getRepository(Team);
   }
 
-  public static getInstance(): TeamRepository {
-    if (!TeamRepository.INSTANCE) {
-      TeamRepository.INSTANCE = new TeamRepository();
-    }
-
-    return TeamRepository.INSTANCE;
+  async create(team: TeamDTO): Promise<void> {
+    const user = await this.repository.create(team);
+    await this.repository.save(user);
   }
 
-  create(team: TeamDTO) {
-    this.repository.push(team);
+  async findByName(name: string): Promise<Team | null> {
+    const team = await this.repository.findOneBy({ name });
     return team;
-  }
-
-  findByName(name: string): ITeam | undefined {
-    const team = this.repository.find((i) => i.name === name);
-    if (!!team) {
-      return {
-        id: team.id,
-        name: new TeamName(team.name),
-      };
-    }
   }
 }
