@@ -1,6 +1,6 @@
-import { TeamDTO, TeamName, teamToDTO } from '../../@types';
-import { ITeamRepository } from '../repositories/implementation/ITeamRepository';
-import { Team } from '../model/Team';
+import { TeamDTO, TeamName, teamToDTO } from '../../../@types';
+import { ITeamRepository } from '../../repositories/implementation/ITeamRepository';
+import { Team } from '../../model/Team';
 
 export class CreateTeamUseCase {
   constructor(private teamRepository: ITeamRepository) {}

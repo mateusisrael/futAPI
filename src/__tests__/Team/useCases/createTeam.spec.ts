@@ -1,6 +1,6 @@
 import { Team } from '../../../modules/Team/model/Team';
 import { TeamRepository } from '../../../modules/Team/repositories/teamRepository';
-import { CreateTeamUseCase } from '../../../modules/Team/useCases/createTeamUseCase';
+import { CreateTeamUseCase } from '../../../modules/Team/useCases/createTeamUseCase/createTeamUseCase';
 import { TeamDTO } from '../../../modules/@types';
 
 describe('Create Team', () => {
