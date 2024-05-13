@@ -15,11 +15,11 @@ export class CreateMatchUseCase {
       throw new Error('Data Inválida');
     }
 
-    if (!this.teamRepository.findByName(principalTeam.name.value)) {
+    if (!this.teamRepository.findByName(principalTeam.name)) {
       throw new Error('Time mandante não encontrado na base de dados');
     }
 
-    if (!this.teamRepository.findByName(guestTeam.name.value)) {
+    if (!this.teamRepository.findByName(guestTeam.name)) {
       throw new Error('Time convidado não encontrado na base de dados');
     }
 

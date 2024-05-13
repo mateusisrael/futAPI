@@ -1,5 +1,5 @@
 import { Repository } from 'typeorm';
-import { postgresDataSource } from '../../../database';
+import { postgresDataSource } from '../../../database/dataSource';
 import { TeamDTO, TeamName } from '../../@types';
 import { ITeamRepository } from './implementation/ITeamRepository';
 import { Team } from '../entities/Team';
@@ -12,7 +12,7 @@ export class TeamRepository implements ITeamRepository {
   }
 
   async create(team: TeamDTO): Promise<void> {
-    const user = await this.repository.create(team);
+    const user = this.repository.create(team);
     await this.repository.save(user);
   }
 

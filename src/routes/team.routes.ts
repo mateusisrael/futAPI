@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import createTeamController from '@modules/Team/useCases/createTeamUseCase';
+import createTeamController from '../modules/Team/useCases/createTeamUseCase';
 
 const teamRoutes = Router();
 
-teamRoutes.get('/', (req, res) => {
+teamRoutes.post('/', (req, res) => {
   createTeamController().handle(req, res);
 });
 

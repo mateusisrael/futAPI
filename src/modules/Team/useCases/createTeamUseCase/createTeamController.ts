@@ -7,13 +7,15 @@ export class CreateTeamController {
   }
 
   async handle(req: Request, res: Response): Promise<Response> {
-    const teamObj = req.body;
+    const { name } = req.body;
 
     try {
-      this.useCase.execute(teamObj);
+      this.useCase.execute(name);
       return res.status(201).json();
     } catch (error) {
       return res.status(400).json();
+    } finally {
+      res.status(500);
     }
   }
 }

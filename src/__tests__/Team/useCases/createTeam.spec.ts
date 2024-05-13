@@ -5,7 +5,7 @@ import { TeamDTO } from '../../../modules/@types';
 
 describe('Create Team', () => {
   it('Should be create a team', () => {
-    const repository = TeamRepository.getInstance();
+    const repository = new TeamRepository();
     const createTeamUseCase = new CreateTeamUseCase(repository);
 
     const teamName = 'Flamengo';
@@ -18,7 +18,7 @@ describe('Create Team', () => {
 
   it('Should not be create two teams with the same names', () => {
     expect.assertions(3);
-    const repository = TeamRepository.getInstance();
+    const repository = new TeamRepository();
     const createTeamUseCase = new CreateTeamUseCase(repository);
 
     const teamName = 'Vasco';
