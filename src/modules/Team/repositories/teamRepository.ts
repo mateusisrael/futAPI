@@ -12,8 +12,8 @@ export class TeamRepository implements ITeamRepository {
   }
 
   async create(team: TeamDTO): Promise<void> {
-    const user = this.repository.create(team);
-    await this.repository.save(user);
+    const createdTeam = this.repository.create(team);
+    await this.repository.save(createdTeam);
   }
 
   async findByName(name: string): Promise<Team | null> {

@@ -1,4 +1,4 @@
-import { Team } from '@modules/Team/entities/Team';
+import { Team } from '@modules/Team/model/Team';
 import { ScoreBoard } from '../Match/entities/Match';
 
 export class TeamName {
@@ -35,12 +35,10 @@ export interface IMatchDTO {
 
 export function teamToDTO(team: Team) {
   return {
-    id: team.id,
-    name: team.name,
+    name: team.name.value,
   };
 }
 
 export interface TeamDTO {
-  id: string;
   name: string;
 }

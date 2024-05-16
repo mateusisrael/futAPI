@@ -1,5 +1,5 @@
+import { TeamDTO } from '@modules/@types';
 import { Team } from '@modules/Team/entities/Team';
-import { TeamDTO } from '../../../@types';
 
 export interface ITeamRepository {
   create(team: TeamDTO): Promise<void>;

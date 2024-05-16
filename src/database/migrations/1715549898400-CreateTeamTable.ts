@@ -10,6 +10,7 @@ export class CreateTeamTable1715549898400 implements MigrationInterface {
             name: 'id',
             type: 'uuid',
             isPrimary: true,
+            isGenerated: true,
           },
           {
             name: 'name',

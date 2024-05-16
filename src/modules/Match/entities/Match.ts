@@ -1,5 +1,5 @@
+import { Team } from '@modules/Team/model/Team';
 import { TeamName } from '../../@types';
-import { ITeam } from '../../Team/entities/Team';
 
 export type TeamScore = {
   timeId: string;
@@ -14,8 +14,8 @@ export type ScoreBoard = {
 
 export interface IMatch {
   id: string;
-  principalTeam: ITeam;
-  guestTeam: ITeam;
+  principalTeam: Team;
+  guestTeam: Team;
   scoreBoard: ScoreBoard;
   date: Date;
   round: number;
