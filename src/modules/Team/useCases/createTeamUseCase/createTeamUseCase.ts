@@ -5,7 +5,7 @@ import { Team } from '../../model/Team';
 export class CreateTeamUseCase {
   constructor(private teamRepository: ITeamRepository) {}
 
-  async execute(name: string): Promise<Team | Error | void> {
+  async execute(name: string): Promise<Error | void> {
     try {
       const teamName = new TeamName(name);
       const hasTeamWithSameName = await this.teamRepository.findByName(name);
@@ -15,9 +15,7 @@ export class CreateTeamUseCase {
       if (!!hasTeamWithSameName) {
         throw new Error('Já existe um time com esse nome');
       } else {
-        const createdTeam = await this.teamRepository.create(teamToDTO(team));
-
-        return createdTeam;
+        await this.teamRepository.create(teamToDTO(team));
       }
     } catch (error) {
       throw error;

@@ -9,13 +9,13 @@ export class CreateTeamController {
   async handle(req: Request, res: Response): Promise<Response> {
     const { name } = req.body;
 
-    try {
-      this.useCase.execute(name);
-      return res.status(201).json();
-    } catch (error) {
-      return res.status(400).json();
-    } finally {
-      res.status(500);
-    }
+    return this.useCase
+      .execute(name)
+      .then((team) => {
+        return res.status(201).json(team);
+      })
+      .catch((error) => {
+        return res.status(400).json({ message: error.message });
+      });
   }
 }
