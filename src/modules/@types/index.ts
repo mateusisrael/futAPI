@@ -7,7 +7,6 @@ export class TeamName {
   readonly value: string;
 
   constructor(value: string) {
-    console.log('value', value);
     this.value = value ?? '';
     if (!this.validate(this.value)) throw new Error('Nome de time inválido');
   }

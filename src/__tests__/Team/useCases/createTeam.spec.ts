@@ -1,33 +1,36 @@
-import { Team } from '../../../modules/Team/model/Team';
-import { TeamRepository } from '../../../modules/Team/repositories/teamRepository';
 import { CreateTeamUseCase } from '../../../modules/Team/useCases/createTeamUseCase/createTeamUseCase';
-import { TeamDTO } from '../../../modules/@types';
+import { InMemoryTeamRepository } from '../../../modules/Team/repositories/inMemoryRepository';
 
 describe('Create Team', () => {
-  it('Should be create a team', () => {
-    const repository = new TeamRepository();
+  it('Should be create a team', async () => {
+    const repository = InMemoryTeamRepository.getInstance();
     const createTeamUseCase = new CreateTeamUseCase(repository);
 
     const teamName = 'Flamengo';
 
-    const team = createTeamUseCase.execute(teamName);
-    console.log(team);
-    expect(team).toHaveProperty('name', 'Flamengo');
-    expect(team).toHaveProperty('id');
+    await createTeamUseCase.execute(teamName);
+    const createdTeam = await repository.findByName(teamName);
+
+    expect(createdTeam).toHaveProperty('name', 'Flamengo');
+    expect(createdTeam).toHaveProperty('id');
   });
 
-  it('Should not be create two teams with the same names', () => {
+  it('Should not be create two teams with the same names', async () => {
     expect.assertions(3);
-    const repository = new TeamRepository();
+    const repository = InMemoryTeamRepository.getInstance();
     const createTeamUseCase = new CreateTeamUseCase(repository);
 
     const teamName = 'Vasco';
 
-    const team1 = createTeamUseCase.execute(teamName);
+    await createTeamUseCase.execute(teamName);
 
-    expect(team1).toHaveProperty('name', 'Vasco');
-    expect(team1).toHaveProperty('id');
+    const createdTeam = await repository.findByName(teamName);
 
-    expect(() => createTeamUseCase.execute(teamName)).toThrow(Error);
+    expect(createdTeam).toHaveProperty('name', 'Vasco');
+    expect(createdTeam).toHaveProperty('id');
+
+    expect(
+      async () => await createTeamUseCase.execute(teamName)
+    ).rejects.toThrow(Error);
   });
 });
