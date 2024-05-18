@@ -1,9 +1,8 @@
-import { ITeam } from '../../../Team/entities/Team';
-import { IMatch, ScoreBoard } from '../../entities/Match';
+import { Match } from '@modules/Match/entities/Match';
 
 export interface IMatchRepository {
-  create: (match: IMatch) => IMatch;
-  update: (id: string, match: IMatch) => IMatch | void;
+  create(match: Match): Promise<Match>;
   // Não deve ser possível alterar o id da partida
-  find: (id?: string) => IMatch | Array<IMatch> | undefined;
+  update(match: Match): Promise<Match | undefined>;
+  find(id?: string): Promise<Match | Match[] | undefined>;
 }

@@ -19,12 +19,8 @@ export class InMemoryTeamRepository implements ITeamRepository {
     return InMemoryTeamRepository.INSTANCE;
   }
 
-  async create(team: TeamDTO): Promise<void> {
-    const createdTeam = {
-      id: uuid(),
-      ...team,
-    };
-    this.repository.push(createdTeam);
+  async create(team: Team): Promise<void> {
+    this.repository.push(team);
   }
 
   async findByName(name: string): Promise<Team | null> {

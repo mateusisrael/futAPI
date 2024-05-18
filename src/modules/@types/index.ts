@@ -1,5 +1,5 @@
-import { Team } from '@modules/Team/model/Team';
-import { ScoreBoard } from '../Match/entities/Match';
+import { ScoreBoard } from '../Match/entities/Scoreboard';
+import { Team } from '../Team/entities/Team';
 
 export class TeamName {
   static readonly REGEX = /^[A-Z][a-zA-Z\s]*$/;
@@ -17,15 +17,15 @@ export class TeamName {
 }
 
 export interface ICreateMatchDTO {
-  principalTeam: TeamDTO;
-  guestTeam: TeamDTO;
+  principalTeam: Team;
+  guestTeam: Team;
   round: number;
   date: Date;
 }
 
-export interface IMatchDTO {
-  principalTeam: TeamDTO;
-  guestTeam: TeamDTO;
+export interface MatchRequest {
+  principalTeam: Team;
+  guestTeam: Team;
   scoreBoard: ScoreBoard;
   date: Date;
   round: number;
@@ -34,7 +34,7 @@ export interface IMatchDTO {
 
 export function teamToDTO(team: Team) {
   return {
-    name: team.name.value,
+    name: team.name,
   };
 }
 

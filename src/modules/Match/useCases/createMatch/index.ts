@@ -1,5 +1,5 @@
 import { TeamRepository } from '../../../Team/repositories/teamRepository';
-import { MatchRepository } from '../../repositories/matchRepository';
+import { MatchRepository } from '../../repositories/inMemoryMatchRepository';
 import { CreateMatchController } from './createMatchController';
 import { CreateMatchUseCase } from './createMatchUseCase';
 
