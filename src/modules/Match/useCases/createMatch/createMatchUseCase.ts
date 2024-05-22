@@ -1,17 +1,16 @@
 import { Team } from '../../../Team/entities/Team';
 import { ICreateMatchDTO } from '../../../@types';
 import { ITeamRepository } from '../../../Team/repositories/implementation/ITeamRepository';
-import { TeamRepository } from '../../../Team/repositories/teamRepository';
-// import { Match } from '../../model/Match';
 import { Match } from '../../entities/Match';
 import { IMatchRepository } from '../../repositories/implementation/IMatchRepository';
-import { error } from 'console';
 import { ScoreBoard } from '../../entities/Scoreboard';
+import { IScoreBoardRepository } from '@modules/Match/repositories/implementation/IScoreBoardRepository';
 
 export class CreateMatchUseCase {
   constructor(
     private matchRepository: IMatchRepository,
-    private teamRepository: ITeamRepository
+    private teamRepository: ITeamRepository,
+    private scoreBoardRepository: IScoreBoardRepository
   ) {}
 
   async execute({ principalTeam, guestTeam, round, date }: ICreateMatchDTO) {
@@ -46,15 +45,22 @@ export class CreateMatchUseCase {
         throw new Error(error);
       });
 
-    const scoreBoard = new ScoreBoard(principalTeam.id, guestTeam.id, 0, 0);
+    const scoreBoard = await this.scoreBoardRepository.create(
+      new ScoreBoard(principalTeam.id, guestTeam.id, 0, 0)
+    );
+
     const match = new Match(
       principalTeam.id,
       guestTeam.id,
       round,
       date,
-      scoreBoard
+      scoreBoard.id
     );
 
-    return await this.matchRepository.create(match);
+    const createdMatch = await this.matchRepository.create(match);
+    return {
+      ...createdMatch,
+      scoreBoard,
+    };
   }
 }

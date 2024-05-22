@@ -4,9 +4,11 @@ import { InMemoryMatchRepository } from '../../../modules/Match/repositories/inM
 import { CreateMatchUseCase } from '../../../modules/Match/useCases/createMatch/createMatchUseCase';
 import { Team } from '../../../modules/Team/entities/Team';
 import { CreateTeamUseCase } from '../../../modules/Team/useCases/createTeamUseCase/createTeamUseCase';
+import { inMemoryScoreBoardRepository } from '../../../modules/Match/repositories/inMemoryScoreBoard';
 
 const teamRepository = InMemoryTeamRepository.getInstance();
 const matchRepository = InMemoryMatchRepository.getInstance();
+const scoreBoardRepository = inMemoryScoreBoardRepository.getInstance();
 const teamUseCase = new CreateTeamUseCase(teamRepository);
 
 // teamUseCase.execute('Flamengo');
@@ -27,7 +29,8 @@ describe('Create Match', () => {
 
     const matchUseCase = new CreateMatchUseCase(
       matchRepository,
-      teamRepository
+      teamRepository,
+      scoreBoardRepository
     );
 
     let match;
@@ -44,7 +47,7 @@ describe('Create Match', () => {
     expect(match).toHaveProperty('id');
   });
 
-  test("Should be initiate a match with 'Não iniciada' status", async () => {
+  test("Should be initiate a match with 'NAO_INICIADA' status", async () => {
     const principalTeam = await teamRepository.findByName('Flamengo');
     const guestTeam = await teamRepository.findByName('Fluminense');
 
@@ -55,7 +58,8 @@ describe('Create Match', () => {
 
     const matchUseCase = new CreateMatchUseCase(
       matchRepository,
-      teamRepository
+      teamRepository,
+      scoreBoardRepository
     );
 
     let match;
@@ -67,7 +71,7 @@ describe('Create Match', () => {
         date: new Date(date.setDate(date.getDate() + 2)),
       });
     }
-    expect(match?.status).toEqual('Não iniciada');
+    expect(match?.status).toEqual('NAO_INICIADA');
   });
 
   test('Should be initiate a match with reseted points', async () => {
@@ -81,7 +85,8 @@ describe('Create Match', () => {
 
     const matchUseCase = new CreateMatchUseCase(
       matchRepository,
-      teamRepository
+      teamRepository,
+      scoreBoardRepository
     );
 
     let match;
@@ -112,7 +117,8 @@ describe('Create Match', () => {
 
     const matchUseCase = new CreateMatchUseCase(
       matchRepository,
-      teamRepository
+      teamRepository,
+      scoreBoardRepository
     );
 
     let match;
@@ -130,8 +136,8 @@ describe('Create Match', () => {
   });
   test('Should not be able to create a match with a not created team', () => {
     const notSavedInRepository = {
-      principalTeam: new Team('Bahia'),
-      guestTeam: new Team('Internacional'),
+      principalTeam: new Team(new TeamName('Bahia')),
+      guestTeam: new Team(new TeamName('Internacional')),
     };
 
     const date = new Date();
@@ -140,7 +146,8 @@ describe('Create Match', () => {
     const teamRepository = InMemoryTeamRepository.getInstance();
     const matchUseCase = new CreateMatchUseCase(
       matchRepository,
-      teamRepository
+      teamRepository,
+      scoreBoardRepository
     );
 
     expect(async () => {

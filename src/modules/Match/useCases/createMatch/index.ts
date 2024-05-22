@@ -1,12 +1,18 @@
-import { TeamRepository } from '../../../Team/repositories/teamRepository';
-import { MatchRepository } from '../../repositories/inMemoryMatchRepository';
+import { inMemoryScoreBoardRepository } from '@modules/Match/repositories/inMemoryScoreBoard';
+import { InMemoryTeamRepository } from '../../../Team/repositories/inMemoryRepository';
+import { InMemoryMatchRepository } from '../../repositories/inMemoryMatchRepository';
 import { CreateMatchController } from './createMatchController';
 import { CreateMatchUseCase } from './createMatchUseCase';
 
 export default (): CreateMatchController => {
-  const matchRepository = MatchRepository.getInstance();
-  const teamRepository = TeamRepository.getInstance();
-  const useCase = new CreateMatchUseCase(matchRepository, teamRepository);
+  const matchRepository = InMemoryMatchRepository.getInstance();
+  const teamRepository = InMemoryTeamRepository.getInstance();
+  const scoreBoardRepository = inMemoryScoreBoardRepository.getInstance();
+  const useCase = new CreateMatchUseCase(
+    matchRepository,
+    teamRepository,
+    scoreBoardRepository
+  );
   const controller = new CreateMatchController(useCase);
 
   return controller;

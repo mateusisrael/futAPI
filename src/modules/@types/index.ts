@@ -1,3 +1,4 @@
+import { Match } from '@modules/Match/entities/Match';
 import { ScoreBoard } from '../Match/entities/Scoreboard';
 import { Team } from '../Team/entities/Team';
 

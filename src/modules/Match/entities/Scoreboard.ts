@@ -1,5 +1,5 @@
 import { Team } from '../../Team/entities/Team';
-import { Column, Entity, ManyToOne, OneToOne, PrimaryColumn } from 'typeorm';
+import { Column, Entity, Index, ManyToOne, PrimaryColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
 @Entity()
@@ -7,9 +7,11 @@ export class ScoreBoard {
   @PrimaryColumn('uuid')
   id: string;
 
+  @Index()
   @ManyToOne(() => Team, (team) => team.id)
   principalTeamId: string;
 
+  @Index()
   @ManyToOne(() => Team, (team) => team.id)
   guestTeamId: string;
 

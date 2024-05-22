@@ -1,5 +1,5 @@
 import { TeamName } from '../../../modules/@types';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { v4 as uuid } from 'uuid';
 
 @Entity()
@@ -8,16 +8,12 @@ export class Team {
   id: string;
 
   @Column()
-  _name: TeamName;
+  name: string;
 
-  constructor(name: string) {
+  constructor(name: TeamName) {
     if (!this.id) {
       this.id = uuid();
     }
-    this._name = new TeamName(name);
-  }
-
-  public get name(): string {
-    return this._name.value;
+    this.name = name?.value;
   }
 }

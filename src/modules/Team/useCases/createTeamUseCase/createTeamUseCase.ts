@@ -9,7 +9,7 @@ export class CreateTeamUseCase {
     try {
       const hasTeamWithSameName = await this.teamRepository.findByName(name);
 
-      const team = new Team(name);
+      const team = new Team(new TeamName(name));
 
       if (!!hasTeamWithSameName) {
         throw new Error('Já existe um time com esse nome');

@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  Index,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -10,9 +11,9 @@ import { v4 as uuid } from 'uuid';
 import { Team } from '../../Team/entities/Team';
 
 export enum MatchStatus {
-  NAO_INICIADA = 'Não iniciada',
-  EM_ANDAMENTO = 'Em andamento',
-  FINALIZADA = 'Finalizada',
+  NAO_INICIADA = 'NAO_INICIADA',
+  EM_ANDAMENTO = 'EM_ANDAMENTO',
+  FINALIZADA = 'FINALIZADA',
 }
 
 @Entity()
@@ -20,8 +21,8 @@ export class Match {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @OneToOne(() => ScoreBoard, { cascade: true })
-  scoreBoard: ScoreBoard;
+  @OneToOne(() => ScoreBoard, (scoreBoard) => scoreBoard.id, { cascade: true })
+  scoreBoardId: string;
 
   @Column({
     type: 'enum',
@@ -36,9 +37,11 @@ export class Match {
   @Column()
   round: number;
 
+  @Index()
   @ManyToOne(() => Team, (team) => team.id)
   principalTeamId: string;
 
+  @Index()
   @ManyToOne(() => Team, (team) => team.id)
   guestTeamId: string;
 
@@ -47,12 +50,12 @@ export class Match {
     guestTeamId: string,
     round: number,
     date: Date,
-    scoreBoard: ScoreBoard
+    scoreBoardId: string
   ) {
     if (!this.id) {
       this.id = uuid();
     }
-    this.scoreBoard = scoreBoard;
+    this.scoreBoardId = scoreBoardId;
     this.status = MatchStatus.NAO_INICIADA;
     this.principalTeamId = principalTeamId;
     this.guestTeamId = guestTeamId;
