@@ -4,7 +4,7 @@ import { ITeamRepository } from '../../../Team/repositories/implementation/ITeam
 import { Match } from '../../entities/Match';
 import { IMatchRepository } from '../../repositories/implementation/IMatchRepository';
 import { ScoreBoard } from '../../entities/Scoreboard';
-import { IScoreBoardRepository } from '@modules/Match/repositories/implementation/IScoreBoardRepository';
+import { IScoreBoardRepository } from '../../repositories/implementation/IScoreBoardRepository';
 
 export class CreateMatchUseCase {
   constructor(

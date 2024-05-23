@@ -1,4 +1,4 @@
-import { inMemoryScoreBoardRepository } from '@modules/Match/repositories/inMemoryScoreBoard';
+import { inMemoryScoreBoardRepository } from '../../repositories/inMemoryScoreBoard';
 import { InMemoryTeamRepository } from '../../../Team/repositories/inMemoryRepository';
 import { InMemoryMatchRepository } from '../../repositories/inMemoryMatchRepository';
 import { CreateMatchController } from './createMatchController';

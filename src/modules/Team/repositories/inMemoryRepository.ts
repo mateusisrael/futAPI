@@ -31,4 +31,8 @@ export class InMemoryTeamRepository implements ITeamRepository {
       return null;
     }
   }
+
+  async list(): Promise<Team[]> {
+    return this.repository;
+  }
 }

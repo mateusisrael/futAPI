@@ -1,6 +1,6 @@
 import { Repository } from 'typeorm';
 import { postgresDataSource } from '../../../database/dataSource';
-import { TeamDTO, TeamName } from '../../@types';
+import { TeamDTO } from '../../@types';
 import { ITeamRepository } from './implementation/ITeamRepository';
 import { Team } from '../entities/Team';
 
@@ -19,5 +19,9 @@ export class TeamRepository implements ITeamRepository {
   async findByName(name: string): Promise<Team | null> {
     const team = await this.repository.findOneBy({ name });
     return team;
+  }
+
+  async list(): Promise<Team[]> {
+    return this.repository.find();
   }
 }
