@@ -1,30 +1,66 @@
+import { Team } from '../../../Team/entities/Team';
 import { ICreateMatchDTO } from '../../../@types';
 import { ITeamRepository } from '../../../Team/repositories/implementation/ITeamRepository';
-import { TeamRepository } from '../../../Team/repositories/teamRepository';
-import { Match } from '../../model/Match';
+import { Match } from '../../entities/Match';
 import { IMatchRepository } from '../../repositories/implementation/IMatchRepository';
+import { ScoreBoard } from '../../entities/Scoreboard';
+import { IScoreBoardRepository } from '../../repositories/implementation/IScoreBoardRepository';
 
 export class CreateMatchUseCase {
   constructor(
     private matchRepository: IMatchRepository,
-    private teamRepository: ITeamRepository
+    private teamRepository: ITeamRepository,
+    private scoreBoardRepository: IScoreBoardRepository
   ) {}
 
-  execute({ principalTeam, guestTeam, round, date }: ICreateMatchDTO) {
+  async execute({ principalTeam, guestTeam, round, date }: ICreateMatchDTO) {
     if (date < new Date()) {
-      throw new Error('Data Inválida');
+      throw new Error('Data de partida Inválida');
     }
 
-    if (!this.teamRepository.findByName(principalTeam.name.value)) {
+    if (!(await this.teamRepository.findByName(principalTeam.name))) {
       throw new Error('Time mandante não encontrado na base de dados');
     }
 
-    if (!this.teamRepository.findByName(guestTeam.name.value)) {
-      throw new Error('Time convidado não encontrado na base de dados');
-    }
+    await this.teamRepository
+      .findByName(principalTeam.name)
+      .then((team) => {
+        if (!(team instanceof Team)) {
+          console.log('TEEEAM', team);
+          throw new Error('Time mandante não encontrado na base de dados');
+        }
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
 
-    const match = new Match(principalTeam, guestTeam, round, date);
+    await this.teamRepository
+      .findByName(guestTeam.name)
+      .then((team) => {
+        if (!(team instanceof Team)) {
+          throw new Error('Time convidado não encontrado na base de dados');
+        }
+      })
+      .catch((error) => {
+        throw new Error(error);
+      });
 
-    return this.matchRepository.create(match);
+    const scoreBoard = await this.scoreBoardRepository.create(
+      new ScoreBoard(principalTeam.id, guestTeam.id, 0, 0)
+    );
+
+    const match = new Match(
+      principalTeam.id,
+      guestTeam.id,
+      round,
+      date,
+      scoreBoard.id
+    );
+
+    const createdMatch = await this.matchRepository.create(match);
+    return {
+      ...createdMatch,
+      scoreBoard,
+    };
   }
 }

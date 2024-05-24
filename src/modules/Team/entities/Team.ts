@@ -1,6 +1,19 @@
-import { TeamName } from '../../@types';
+import { TeamName } from '../../../modules/@types';
+import { Column, Entity, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
+import { v4 as uuid } from 'uuid';
 
-export interface ITeam {
+@Entity()
+export class Team {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
-  name: TeamName;
+
+  @Column()
+  name: string;
+
+  constructor(name: TeamName) {
+    if (!this.id) {
+      this.id = uuid();
+    }
+    this.name = name?.value;
+  }
 }

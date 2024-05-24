@@ -1,23 +1,65 @@
-import { TeamName } from '../../@types';
-import { ITeam } from '../../Team/entities/Team';
+import {
+  Column,
+  Entity,
+  Index,
+  ManyToOne,
+  OneToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { ScoreBoard } from './Scoreboard';
+import { v4 as uuid } from 'uuid';
+import { Team } from '../../Team/entities/Team';
 
-export type TeamScore = {
-  timeId: string;
-  name: TeamName;
-  points: number;
-};
+export enum MatchStatus {
+  NAO_INICIADA = 'NAO_INICIADA',
+  EM_ANDAMENTO = 'EM_ANDAMENTO',
+  FINALIZADA = 'FINALIZADA',
+}
 
-export type ScoreBoard = {
-  principalTeam: TeamScore;
-  guestTeam: TeamScore;
-};
-
-export interface IMatch {
+@Entity()
+export class Match {
+  @PrimaryGeneratedColumn('uuid')
   id: string;
-  principalTeam: ITeam;
-  guestTeam: ITeam;
-  scoreBoard: ScoreBoard;
+
+  @OneToOne(() => ScoreBoard, (scoreBoard) => scoreBoard.id, { cascade: true })
+  scoreBoardId: string;
+
+  @Column({
+    type: 'enum',
+    enum: MatchStatus,
+    default: MatchStatus.NAO_INICIADA,
+  })
+  status: MatchStatus;
+
+  @Column()
   date: Date;
+
+  @Column()
   round: number;
-  status: 'Não iniciada' | 'Em andamento' | 'Finalizada';
+
+  @Index()
+  @ManyToOne(() => Team, (team) => team.id)
+  principalTeamId: string;
+
+  @Index()
+  @ManyToOne(() => Team, (team) => team.id)
+  guestTeamId: string;
+
+  constructor(
+    principalTeamId: string,
+    guestTeamId: string,
+    round: number,
+    date: Date,
+    scoreBoardId: string
+  ) {
+    if (!this.id) {
+      this.id = uuid();
+    }
+    this.scoreBoardId = scoreBoardId;
+    this.status = MatchStatus.NAO_INICIADA;
+    this.principalTeamId = principalTeamId;
+    this.guestTeamId = guestTeamId;
+    this.round = round;
+    this.date = date;
+  }
 }

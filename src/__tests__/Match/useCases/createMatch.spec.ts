@@ -1,21 +1,26 @@
+import { InMemoryTeamRepository } from '../../../modules/Team/repositories/inMemoryRepository';
 import { TeamName } from '../../../modules/@types';
-import { MatchRepository } from '../../../modules/Match/repositories/matchRepository';
+import { InMemoryMatchRepository } from '../../../modules/Match/repositories/inMemoryMatchRepository';
 import { CreateMatchUseCase } from '../../../modules/Match/useCases/createMatch/createMatchUseCase';
-import { Team } from '../../../modules/Team/model/Team';
-import { TeamRepository } from '../../../modules/Team/repositories/teamRepository';
+import { Team } from '../../../modules/Team/entities/Team';
 import { CreateTeamUseCase } from '../../../modules/Team/useCases/createTeamUseCase/createTeamUseCase';
+import { inMemoryScoreBoardRepository } from '../../../modules/Match/repositories/inMemoryScoreBoard';
 
-const teamRepository = TeamRepository.getInstance();
-const matchRepository = MatchRepository.getInstance();
+const teamRepository = InMemoryTeamRepository.getInstance();
+const matchRepository = InMemoryMatchRepository.getInstance();
+const scoreBoardRepository = inMemoryScoreBoardRepository.getInstance();
 const teamUseCase = new CreateTeamUseCase(teamRepository);
 
-teamUseCase.execute('Flamengo');
-teamUseCase.execute('Fluminense');
+// teamUseCase.execute('Flamengo');
+// teamUseCase.execute('Fluminense');
 
 describe('Create Match', () => {
-  test('Should be able to create a match', () => {
-    const principalTeam = teamRepository.findByName('Flamengo');
-    const guestTeam = teamRepository.findByName('Fluminense');
+  test('Should be able to create a match', async () => {
+    await teamUseCase.execute('Flamengo');
+    await teamUseCase.execute('Fluminense');
+
+    const principalTeam = await teamRepository.findByName('Flamengo');
+    const guestTeam = await teamRepository.findByName('Fluminense');
 
     expect(principalTeam).toHaveProperty('id');
     expect(guestTeam).toHaveProperty('id');
@@ -24,26 +29,27 @@ describe('Create Match', () => {
 
     const matchUseCase = new CreateMatchUseCase(
       matchRepository,
-      teamRepository
+      teamRepository,
+      scoreBoardRepository
     );
 
     let match;
 
     if (!!principalTeam && !!guestTeam) {
-      match = matchUseCase.execute({
+      match = await matchUseCase.execute({
         principalTeam,
         guestTeam,
         round: 0,
-        date: date,
+        date: new Date(date.setDate(date.getDate() + 2)),
       });
     }
 
     expect(match).toHaveProperty('id');
   });
 
-  test("Should be initiate a match with 'Não iniciada' status", () => {
-    const principalTeam = teamRepository.findByName('Flamengo');
-    const guestTeam = teamRepository.findByName('Fluminense');
+  test("Should be initiate a match with 'NAO_INICIADA' status", async () => {
+    const principalTeam = await teamRepository.findByName('Flamengo');
+    const guestTeam = await teamRepository.findByName('Fluminense');
 
     expect(principalTeam).toHaveProperty('id');
     expect(guestTeam).toHaveProperty('id');
@@ -52,25 +58,25 @@ describe('Create Match', () => {
 
     const matchUseCase = new CreateMatchUseCase(
       matchRepository,
-      teamRepository
+      teamRepository,
+      scoreBoardRepository
     );
 
     let match;
     if (!!principalTeam && !!guestTeam) {
-      match = matchUseCase.execute({
+      match = await matchUseCase.execute({
         principalTeam,
         guestTeam,
         round: 0,
-        date: date,
+        date: new Date(date.setDate(date.getDate() + 2)),
       });
     }
-
-    expect(match?.status).toEqual('Não iniciada');
+    expect(match?.status).toEqual('NAO_INICIADA');
   });
 
-  test('Should be initiate a match with reseted points', () => {
-    const principalTeam = teamRepository.findByName('Flamengo');
-    const guestTeam = teamRepository.findByName('Fluminense');
+  test('Should be initiate a match with reseted points', async () => {
+    const principalTeam = await teamRepository.findByName('Flamengo');
+    const guestTeam = await teamRepository.findByName('Fluminense');
 
     expect(principalTeam).toHaveProperty('id');
     expect(guestTeam).toHaveProperty('id');
@@ -79,25 +85,27 @@ describe('Create Match', () => {
 
     const matchUseCase = new CreateMatchUseCase(
       matchRepository,
-      teamRepository
+      teamRepository,
+      scoreBoardRepository
     );
 
     let match;
     if (!!principalTeam && !!guestTeam) {
-      match = matchUseCase.execute({
+      match = await matchUseCase.execute({
         principalTeam,
         guestTeam,
         round: 0,
-        date: date,
+        date: new Date(date.setDate(date.getDate() + 2)),
       });
     }
 
-    expect(match?.scoreBoard.principalTeam.points).toEqual(0);
-    expect(match?.scoreBoard.guestTeam.points).toEqual(0);
+    expect(match?.scoreBoard.principalTeamPoints).toEqual(0);
+    expect(match?.scoreBoard.principalTeamPoints).toEqual(0);
   });
-  test('Should not be able to create a match with a past date', () => {
-    const principalTeam = teamRepository.findByName('Flamengo');
-    const guestTeam = teamRepository.findByName('Fluminense');
+
+  test('Should not be able to create a match with a past date', async () => {
+    const principalTeam = await teamRepository.findByName('Flamengo');
+    const guestTeam = await teamRepository.findByName('Fluminense');
 
     expect(principalTeam).toHaveProperty('id');
     expect(guestTeam).toHaveProperty('id');
@@ -109,21 +117,22 @@ describe('Create Match', () => {
 
     const matchUseCase = new CreateMatchUseCase(
       matchRepository,
-      teamRepository
+      teamRepository,
+      scoreBoardRepository
     );
 
     let match;
 
-    expect(() => {
+    expect(async () => {
       if (!!principalTeam && !!guestTeam) {
-        match = matchUseCase.execute({
+        match = await matchUseCase.execute({
           principalTeam,
           guestTeam,
           round: 0,
           date: date,
         });
       }
-    }).toThrow(Error('Data Inválida'));
+    }).rejects.toThrow(Error('Data de partida Inválida'));
   });
   test('Should not be able to create a match with a not created team', () => {
     const notSavedInRepository = {
@@ -133,21 +142,22 @@ describe('Create Match', () => {
 
     const date = new Date();
 
-    const matchRepository = MatchRepository.getInstance();
-    const teamRepository = TeamRepository.getInstance();
+    const matchRepository = InMemoryMatchRepository.getInstance();
+    const teamRepository = InMemoryTeamRepository.getInstance();
     const matchUseCase = new CreateMatchUseCase(
       matchRepository,
-      teamRepository
+      teamRepository,
+      scoreBoardRepository
     );
 
-    expect(() => {
-      matchUseCase.execute({
+    expect(async () => {
+      await matchUseCase.execute({
         principalTeam: notSavedInRepository.principalTeam,
         guestTeam: notSavedInRepository.guestTeam,
         round: 0,
-        date: date,
+        date: new Date(date.setDate(date.getDate() + 2)),
       });
-    }).toThrow(
+    }).rejects.toThrow(
       Error(
         'Time mandante não encontrado na base de dados' ||
           'Time convidado não encontrado na base de dados'

@@ -1,12 +1,12 @@
 import { DataSource } from 'typeorm';
 
-export const myDataSource = new DataSource({
+export const postgresDataSource = new DataSource({
   type: 'postgres',
   host: 'localhost',
-  port: 3306,
-  username: 'test',
-  password: 'test',
-  database: 'test',
+  port: 5432,
+  username: 'mateus',
+  password: '1212',
+  database: 'futAPI',
   logging: true,
   synchronize: true,
   entities: [
