@@ -1,4 +1,3 @@
-import { Match } from '@modules/Match/entities/Match';
 import { ScoreBoard } from '../Match/entities/Scoreboard';
 import { Team } from '../Team/entities/Team';
 
@@ -40,5 +39,7 @@ export function teamToDTO(team: Team) {
 }
 
 export interface TeamDTO {
+  id: string;
   name: string;
+  emblem: string | undefined;
 }

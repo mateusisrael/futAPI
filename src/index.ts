@@ -3,6 +3,7 @@ import bodyParser from 'body-parser';
 import { matchRoutes } from './routes/match.routes';
 import { teamRoutes } from './routes/team.routes';
 import { postgresDataSource } from './database/dataSource';
+
 import 'reflect-metadata';
 
 const PORT = 3000;

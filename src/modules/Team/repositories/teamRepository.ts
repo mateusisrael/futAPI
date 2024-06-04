@@ -11,7 +11,7 @@ export class TeamRepository implements ITeamRepository {
     this.repository = postgresDataSource.getRepository(Team);
   }
 
-  async create(team: TeamDTO): Promise<void> {
+  async create(team: Team): Promise<void> {
     const createdTeam = this.repository.create(team);
     await this.repository.save(createdTeam);
   }
@@ -21,7 +21,19 @@ export class TeamRepository implements ITeamRepository {
     return team;
   }
 
+  async find(id: string): Promise<Team | null> {
+    return await this.repository
+      .createQueryBuilder('team')
+      .leftJoinAndSelect('team.emblem', 'emblem')
+      .where('team.id = :id', { id: id })
+      .getOne();
+  }
+
   async list(): Promise<Team[]> {
     return this.repository.find();
+  }
+
+  async save(team: Team): Promise<void> {
+    await this.repository.save(team);
   }
 }

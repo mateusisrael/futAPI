@@ -16,7 +16,7 @@ export class CreateMatchTable1716244894237 implements MigrationInterface {
 
     await queryRunner.createTable(
       new Table({
-        name: 'Match',
+        name: 'match',
         columns: [
           {
             name: 'id',
@@ -51,7 +51,7 @@ export class CreateMatchTable1716244894237 implements MigrationInterface {
 
     await queryRunner.createTable(
       new Table({
-        name: 'ScoreBoard',
+        name: 'score_board',
         columns: [
           {
             name: 'id',
@@ -80,27 +80,27 @@ export class CreateMatchTable1716244894237 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'ScoreBoard',
+      'score_board',
       new TableForeignKey({
         columnNames: ['guestTeamId'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'Team',
+        referencedTableName: 'team',
         onDelete: 'CASCADE',
       })
     );
 
     await queryRunner.createForeignKey(
-      'ScoreBoard',
+      'score_board',
       new TableForeignKey({
         columnNames: ['principalTeamId'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'Team',
+        referencedTableName: 'team',
         onDelete: 'CASCADE',
       })
     );
 
     await queryRunner.addColumn(
-      'Match',
+      'match',
       new TableColumn({
         name: 'scoreBoardId',
         type: 'uuid',
@@ -108,7 +108,7 @@ export class CreateMatchTable1716244894237 implements MigrationInterface {
     );
 
     await queryRunner.addColumn(
-      'Match',
+      'match',
       new TableColumn({
         name: 'guestTeamId',
         type: 'uuid',
@@ -116,7 +116,7 @@ export class CreateMatchTable1716244894237 implements MigrationInterface {
     );
 
     await queryRunner.addColumn(
-      'Match',
+      'match',
       new TableColumn({
         name: 'principalTeamId',
         type: 'uuid',
@@ -124,55 +124,55 @@ export class CreateMatchTable1716244894237 implements MigrationInterface {
     );
 
     await queryRunner.createForeignKey(
-      'Match',
+      'match',
       new TableForeignKey({
         columnNames: ['scoreBoardId'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'ScoreBoard',
+        referencedTableName: 'score_board',
         onDelete: 'CASCADE',
       })
     );
 
     await queryRunner.createForeignKey(
-      'Match',
+      'match',
       new TableForeignKey({
         columnNames: ['guestTeamId'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'Team',
+        referencedTableName: 'team',
         onDelete: 'CASCADE',
       })
     );
 
     await queryRunner.createForeignKey(
-      'Match',
+      'match',
       new TableForeignKey({
         columnNames: ['principalTeamId'],
         referencedColumnNames: ['id'],
-        referencedTableName: 'Team',
+        referencedTableName: 'team',
         onDelete: 'CASCADE',
       })
     );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    const matchTable = await queryRunner.getTable('Match');
+    const matchTable = await queryRunner.getTable('match');
 
     const matchForeignKeys = matchTable?.foreignKeys;
 
     if (!!matchForeignKeys) {
-      await queryRunner.dropForeignKeys('Match', matchForeignKeys);
+      await queryRunner.dropForeignKeys('match', matchForeignKeys);
     }
 
-    const scoreBoardTable = await queryRunner.getTable('ScoreBoard');
+    const scoreBoardTable = await queryRunner.getTable('score_board');
 
     const scoreBoardForeignKeys = scoreBoardTable?.foreignKeys;
 
     if (!!scoreBoardForeignKeys) {
-      await queryRunner.dropForeignKeys('ScoreBoard', scoreBoardForeignKeys);
+      await queryRunner.dropForeignKeys('score_board', scoreBoardForeignKeys);
     }
 
-    await queryRunner.dropTable('Match');
-    await queryRunner.dropTable('ScoreBoard');
+    await queryRunner.dropTable('match');
+    await queryRunner.dropTable('score_board');
     await queryRunner.query("DROP TYPE 'status'");
   }
 }

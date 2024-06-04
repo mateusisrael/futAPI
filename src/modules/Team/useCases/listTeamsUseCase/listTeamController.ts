@@ -7,11 +7,11 @@ export class ListTeamController {
   }
 
   async handle(req: Request, res: Response): Promise<Response> {
-    const name = req.params.name;
+    const id = req.params.id;
 
     console.log('PARAMS', req.params);
     return this.useCase
-      .execute(name)
+      .execute(id)
       .then((teams) => {
         return res.status(200).json(teams);
       })

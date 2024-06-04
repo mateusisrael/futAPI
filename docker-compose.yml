@@ -16,6 +16,8 @@ services:
 
   app:
     build: .
+    depends_on:
+      - database
     container_name: futAPI
     ports:
       - 3000:3000
